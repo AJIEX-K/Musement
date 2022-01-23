@@ -4,7 +4,6 @@ using Musement.Business;
 using Musement.Command;
 using Unity;
 using Unity.Injection;
-using Unity.Lifetime;
 using WeatherForecast;
 
 namespace Musement.Configuration
