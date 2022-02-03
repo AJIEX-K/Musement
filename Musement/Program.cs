@@ -1,15 +1,15 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Musement.Business;
-using Unity;
 using WeatherForecast;
 
 namespace Musement
 {
     class Program
     {
-        private static UnityContainer _container { get; set; }
+        private static ServiceProvider _serviceProvider { get; set; }
         public static async Task<int> Main(string[] args)
         {
             Console.WriteLine("Type the command 'cities' please");
@@ -38,21 +38,22 @@ namespace Musement
         private static ICommandModule<string> Initialize()
         {
             var configuration = new Configuration.Configuration();
-            _container = configuration.Configurate();
-            var commandModule = _container.Resolve<ICommandModule<string>>();
-            var component = new CityWeatherComponentBuilder(_container.Resolve<ICityService>(),
-                _container.Resolve<IWeatherForecastService>());
+            _serviceProvider = configuration.ConfigurateServiceContainer();
+            
+            var commandModule = _serviceProvider.GetService<ICommandModule<string>>();
+            var component = new CityWeatherComponentBuilder(_serviceProvider.GetService<ICityService>(),
+                _serviceProvider.GetService<IWeatherForecastService>());
             commandModule.RegisterCommand("cities", () => component.Build().GetRequestResultAsync(),
-                _container.Resolve<IPrintResult<string>>());
+                _serviceProvider.GetService<IPrintResult<string>>());
             return commandModule;
         }
 
         private static bool IsApplicationConfigurated(out string message)
         {
             message = string.Empty;
-            if (_container == null)
+            if (_serviceProvider == null)
                 return false;
-            var config = _container.Resolve<IConfiguration>();
+            var config = _serviceProvider.GetService<IConfiguration>();
             var settings = config.GetSection("weatherForecast");
             if (string.IsNullOrEmpty(settings["key"]))
             {
