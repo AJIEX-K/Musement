@@ -32,7 +32,7 @@ namespace Musement.UnitTest
         [TestMethod]
         public async Task GetCities_ReturnCityCollection_UnitTest()
         {
-            _mockCityService.GetCitiesAsync().Returns(await Task.FromResult(new RequestResult<IEnumerable<City>>(CityMock.Cities)));
+            _mockCityService.GetCitiesAsync().Returns(new RequestResult<IEnumerable<City>>(CityMock.Cities));
             var cities = await _mockCityService.GetCitiesAsync();
             Assert.IsTrue(cities.IsSucceed);
             Assert.IsTrue(cities.Result.Any());
@@ -41,7 +41,7 @@ namespace Musement.UnitTest
         [TestMethod]
         public async Task GetCityById_ReturnOneCity_UnitTest()
         {
-            _mockCityService.GetCityAsync(Arg.Any<int>()).Returns(await Task.FromResult(new RequestResult<City>(CityMock.City57)));
+            _mockCityService.GetCityAsync(Arg.Any<int>()).Returns(new RequestResult<City>(CityMock.City57));
             var city = await _mockCityService.GetCityAsync(57);
             Assert.IsTrue(city.IsSucceed);
             Assert.IsNotNull(city.Result);
@@ -51,7 +51,7 @@ namespace Musement.UnitTest
         [TestMethod]
         public async Task GetNotExistCityById_ReturnError_UnitTest()
         {
-            _mockCityService.GetCityAsync(Arg.Any<int>()).Returns(await Task.FromResult(new RequestResult<City>("Response status code does not indicate success: 404 (Not Found).")));
+            _mockCityService.GetCityAsync(Arg.Any<int>()).Returns(new RequestResult<City>("Response status code does not indicate success: 404 (Not Found)."));
             var city = await _mockCityService.GetCityAsync(0);
             Assert.IsFalse(city.IsSucceed);
             Assert.IsNull(city.Result);
