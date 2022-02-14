@@ -31,7 +31,7 @@ namespace Musement.UnitTest
         [TestMethod]
         public async Task GetCityWeatherForecastByCity_ReturnCityWeatherForecast_for2days_UnitTest()
         {
-            _mockWeatherService.GetWeatherForecastAsync(Arg.Any<City>()).Returns(await Task.FromResult(new RequestResult<Model.WeatherForecast>(WeatherForecastMock.WeatherForecast57_2days)));
+            _mockWeatherService.GetWeatherForecastAsync(Arg.Any<City>()).Returns(new RequestResult<Model.WeatherForecast>(WeatherForecastMock.WeatherForecast57_2days));
             var forecast = await _mockWeatherService.GetWeatherForecastAsync(CityMock.City57);
             Assert.IsTrue(forecast.IsSucceed);
             Assert.IsNotNull(forecast.Result);
@@ -41,7 +41,7 @@ namespace Musement.UnitTest
         [TestMethod]
         public async Task GetCityWeatherForecastFor3Day_ReturnCityWeatherForecast_for3days_UnitTest()
         {
-            _mockWeatherService.GetWeatherForecastAsync(Arg.Any<City>(), 3).Returns(await Task.FromResult(new RequestResult<Model.WeatherForecast>(WeatherForecastMock.WeatherForecast57_3days)));
+            _mockWeatherService.GetWeatherForecastAsync(Arg.Any<City>(), 3).Returns(new RequestResult<Model.WeatherForecast>(WeatherForecastMock.WeatherForecast57_3days));
             var forecast = await _mockWeatherService.GetWeatherForecastAsync(CityMock.City57, 3);
             Assert.IsTrue(forecast.IsSucceed);
             Assert.IsNotNull(forecast.Result);
@@ -54,7 +54,7 @@ namespace Musement.UnitTest
             var city = CityMock.City57;
             city.Latitude = "qwe";
             city.Longitude = "qwe";
-            _mockWeatherService.GetWeatherForecastAsync(city).Returns(await Task.FromResult(new RequestResult<Model.WeatherForecast>("Response status code does not indicate success: 400 (Bad Request).")));
+            _mockWeatherService.GetWeatherForecastAsync(city).Returns(new RequestResult<Model.WeatherForecast>("Response status code does not indicate success: 400 (Bad Request)."));
             var forecast = await _mockWeatherService.GetWeatherForecastAsync(city);
             Assert.IsFalse(forecast.IsSucceed);
             Assert.IsNull(forecast.Result);

@@ -25,7 +25,7 @@ namespace Musement.UnitTest
         [TestMethod]
         public async Task WeatherForecastComponent_GetDataByCityAsync_ReturnCityWeatherForecast_UnitTest()
         {
-            _mockWeatherService.GetWeatherForecastAsync(Arg.Any<City>()).Returns(await Task.FromResult(new RequestResult<Model.WeatherForecast>(WeatherForecastMock.WeatherForecast57_2days)));
+            _mockWeatherService.GetWeatherForecastAsync(Arg.Any<City>()).Returns(new RequestResult<Model.WeatherForecast>(WeatherForecastMock.WeatherForecast57_2days));
             var component = new WeatherForecastComponent(_mockWeatherService);
             var result = await component.GetDataAsync(CityMock.City57);
             Assert.IsTrue(result.IsSucceed);

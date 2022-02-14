@@ -20,12 +20,12 @@ namespace Musement.UnitTest
         {
             base.Initialize();
             _mockCityService = Substitute.For<ICityService>();
+            _mockCityService.GetCitiesAsync().Returns(new RequestResult<IEnumerable<City>>(CityMock.Cities));
         }
 
         [TestMethod]
         public async Task CityComponent_GetDataAsync_ReturnCityCollection_UnitTest()
         {
-            _mockCityService.GetCitiesAsync().Returns(await Task.FromResult(new RequestResult<IEnumerable<City>>(CityMock.Cities)));
             var component = new CityComponent(Substitute.For<IComponentResultBuilder<City>>(), _mockCityService);
             var result = await component.GetDataAsync();
             Assert.IsTrue(result.IsSucceed);
@@ -35,7 +35,6 @@ namespace Musement.UnitTest
         [TestMethod]
         public async Task CityComponent_GetRequestResultAsync_ReturnResultCollection_UnitTest()
         {
-            _mockCityService.GetCitiesAsync().Returns(await Task.FromResult(new RequestResult<IEnumerable<City>>(CityMock.Cities)));
             var component = new CityComponent(Substitute.For<IComponentResultBuilder<City>>(), _mockCityService);
             var result = await component.GetRequestResultAsync();
             Assert.IsTrue(result.Any());

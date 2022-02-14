@@ -34,13 +34,13 @@ namespace Musement.UnitTest
 
             _mockCityService = Substitute.For<ICityService>();
             _mockWeatherService = Substitute.For<IWeatherForecastService>();
+            _mockCityService.GetCitiesAsync().Returns(new RequestResult<IEnumerable<City>>(CityMock.Cities));
+            _mockWeatherService.GetWeatherForecastAsync(Arg.Any<City>()).Returns(new RequestResult<Model.WeatherForecast>(WeatherForecastMock.WeatherForecast57_2days));
         }
 
         [TestMethod]
         public async Task BuildCityWeatherComponent_ReturnCityWeatherForecastCollection_UnitTest()
         {
-            _mockCityService.GetCitiesAsync().Returns(await Task.FromResult(new RequestResult<IEnumerable<City>>(CityMock.Cities)));
-            _mockWeatherService.GetWeatherForecastAsync(Arg.Any<City>()).Returns(await Task.FromResult(new RequestResult<Model.WeatherForecast>(WeatherForecastMock.WeatherForecast57_2days)));
             var component = new CityWeatherComponentBuilder(_mockCityService, _mockWeatherService);
             var result = await component.Build().GetRequestResultAsync();
             Assert.IsNotNull(result);
@@ -50,8 +50,6 @@ namespace Musement.UnitTest
         [TestMethod]
         public async Task BuildCityWeatherComponent_PrintCityWeatherForecastCollectionResult_UnitTest()
         {
-            _mockCityService.GetCitiesAsync().Returns(await Task.FromResult(new RequestResult<IEnumerable<City>>(CityMock.Cities)));
-            _mockWeatherService.GetWeatherForecastAsync(Arg.Any<City>()).Returns(await Task.FromResult(new RequestResult<Model.WeatherForecast>(WeatherForecastMock.WeatherForecast57_2days)));
             var component = new CityWeatherComponentBuilder(_mockCityService, _mockWeatherService);
             var results = await component.Build().GetRequestResultAsync();
             Assert.IsNotNull(results);
